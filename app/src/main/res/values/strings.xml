@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TelstraAssignment</string>
+    <string name="content_description_image">Country Fact Image</string>
+    <string name="content_description_arrow">Right Arrow Image</string>
+</resources>
