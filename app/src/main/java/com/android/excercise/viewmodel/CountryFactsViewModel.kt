@@ -6,6 +6,7 @@ import com.android.excercise.data.DataState
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/* ViewModel class. */
 class CountryFactsViewModel @Inject constructor (private val countryFactsRepository: CountryFactsRepository): ViewModel() {
 
     // MutableLiveData object is private so it will not get updated from outside
@@ -30,6 +31,7 @@ class CountryFactsViewModel @Inject constructor (private val countryFactsReposit
 
 }
 
+/* ViewModelFactory class will provide ViewModel instance. */
 @Suppress("UNCHECKED_CAST")
 class CountryFactsViewModelFactory @Inject constructor (private val viewModel: CountryFactsViewModel) :
     ViewModelProvider.Factory {
