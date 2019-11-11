@@ -9,6 +9,7 @@ import com.android.excercise.data.model.CountryFacts
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.country_facts_item.view.*
 
+/* This is Adapter class for Recyclerview. */
 class CountryFactsAdapter:RecyclerView.Adapter<CountryFactsAdapter.CountryFactsViewHolder>() {
 
     var countryFactList: List<CountryFacts>? = null
@@ -33,14 +34,17 @@ class CountryFactsAdapter:RecyclerView.Adapter<CountryFactsAdapter.CountryFactsV
         fun bind(countryFacts: CountryFacts?){
             itemView.apply {
                 title.text = countryFacts?.title
-                description.text = countryFacts?.description
-                countryFacts?.image?.let { imageurl ->
-                    Picasso.get()
-                        .load(imageurl)
-                        .fit().centerInside()
-                        .error(R.drawable.ic_launcher_background)
-                        .into(factImage)
+                if(countryFacts?.description.isNullOrEmpty()) {
+                    description.text = context.resources.getString(R.string.default_description)
+                }else{
+                    description.text = countryFacts?.description
                 }
+                Picasso.get()
+                    .load(countryFacts?.image)
+                    .fit().centerInside()
+                    .placeholder(R.drawable.default_image)
+                    .error(R.drawable.default_image)
+                    .into(image)
 
             }
         }

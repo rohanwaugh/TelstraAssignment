@@ -2,18 +2,18 @@ package com.android.excercise.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.excercise.R
 import com.android.excercise.data.DataState
+import com.android.excercise.data.model.CountryFacts
 import com.android.excercise.databinding.ActivityMainBinding
 import com.android.excercise.di.DaggerCountryFactsComponent
 import com.android.excercise.viewmodel.CountryFactsViewModel
 import com.android.excercise.viewmodel.CountryFactsViewModelFactory
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         observeCountryFactsData()
     }
 
-
+    /* This function will setup the Recyclerview. */
     private fun setupRecyclerView(){
         val linearLayoutManager = LinearLayoutManager(this)
 
@@ -65,22 +65,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /* This function will observe LiveData object in ViewModel and update the Recyclerview Adapter
+    *  whenever LiveData changes. */
     private fun observeCountryFactsData(){
         countryFactsViewModel.getCountryDataState()
             ?.observe(this, Observer { factsDataStatus ->
                 when (factsDataStatus) {
 
                     is DataState.Success -> {
-                        Log.d("XYZ",factsDataStatus.countryData?.title)
-                        countryFactsAdapter.countryFactList = factsDataStatus.countryData?.factList
+                        toolbar?.title = factsDataStatus.countryData?.title
+
+                        countryFactsAdapter.countryFactList = filterCountryFactsList(factsDataStatus.countryData?.factList)
                         countryFactsAdapter.notifyDataSetChanged()
                         swipeRefresh.isRefreshing = false
                     }
 
                     is DataState.Error -> {
-
+                        Toast.makeText(this,"No Data",Toast.LENGTH_LONG).show()
                     }
                 }
             })
+    }
+
+    /* This function will filter items from the list having no title. */
+    private fun filterCountryFactsList(factsList:List<CountryFacts>?): List<CountryFacts>?{
+
+        return factsList?.filter { countryFacts ->
+            countryFacts.title?.isNotEmpty()?:false
+        }
     }
 }
