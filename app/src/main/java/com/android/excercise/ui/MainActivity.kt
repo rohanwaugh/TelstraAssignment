@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     is DataState.Error -> {
-                        Toast.makeText(this,"No Data",Toast.LENGTH_LONG).show()
+                        Toast.makeText(this,factsDataStatus.error.toString(),Toast.LENGTH_LONG).show()
                     }
                 }
             })
